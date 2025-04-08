@@ -1,0 +1,319 @@
+
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحة المنتجات</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no, minimal-ui">
+
+
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #00355F;
+            padding: 5px;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .categories{
+margin-top: -30px;    
+    }
+        header input {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            width: 70%;
+        }
+        .slider {
+            display: flex;
+            overflow-x: auto;
+            padding: 10px;
+            gap: 10px;
+            background: white;
+        }
+        .slider img {
+            width: 200px;
+            height: auto;
+            border-radius: 10px;
+        }
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            padding: 10px;
+        }
+        .category {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            text-align: center;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+        }
+        .category img {
+            width: 100%;
+            object-fit: cover;
+            width: 100%;
+  height: 80%;
+  object-fit: contain;
+        }
+        .category p {
+            margin: 10px 0;
+        }
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: #00355F;
+            color: white;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            height: 50px;
+        }
+        footer div {
+            text-align: center;
+        }
+
+        .category {
+  background-color: white;
+  border-radius: 10px;
+  overflow: hidden;
+  text-align: center;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+  padding: 10px;
+}
+
+.category img {
+  width: 100%;
+  height: 170px;
+  object-fit: cover;
+  border-bottom: 1px solid #eee;
+}
+
+.product-name {
+  margin: 10px 0 5px;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.product-price {
+  color: green;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.add-to-cart {
+  padding: 8px 12px;
+  background-color: #00355F;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.add-to-cart:hover {
+  background-color: #00355F;
+}
+
+
+#filter{
+    margin-bottom: -200px;
+}
+
+
+#foter {
+
+    margin-top: 200px;
+}
+body {
+  padding-bottom: 80px; /* خليها حسب ارتفاع الفوتر + شوي */
+}
+#goToHome{
+margin-right: 50px;    width: 80px;
+}
+#tex22{
+    font-size: 22px;
+    margin-left: 50px;
+}
+#tect1{
+    font-size: 11px;
+}
+  
+.categories {
+  display: flex;
+  justify-content: center;
+  padding: 30px 15px;
+}
+
+#deliveryForm {
+  background-color: #ffffff;
+  padding: 25px 20px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  max-width: 400px;
+  width: 350px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  font-family: 'Cairo', sans-serif;
+}
+
+#deliveryForm label {
+  font-weight: bold;
+  font-size: 1rem;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+#deliveryForm input {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+#deliveryForm input:focus {
+  border-color: #00355F;
+  outline: none;
+}
+
+#deliveryForm button {
+  background-color: #00355F;
+  color: white;
+  border: none;
+  padding: 14px;
+  font-size: 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#deliveryForm button:hover {
+  background-color: #00355F;
+}
+
+@media (max-width: 480px) {
+  #deliveryForm {
+    padding: 20px 15px;
+  }
+
+  #deliveryForm label,
+  #deliveryForm input,
+  #deliveryForm button {
+    font-size: 0.95rem;
+  }
+}
+
+#deliveryForm input {
+  direction: rtl;
+  text-align: right;
+}
+
+#name {
+padding: 30px;
+}
+
+
+    </style>
+</head>
+<body>
+    <header>
+        <img src="logo (1).svg" id="goToHome">
+        
+
+       <h3 id="tex22">التخفيضات</h3>
+    </header>
+
+    <div class="slider">
+     
+
+        <div class="categories">
+          <form id="deliveryForm" action="save_address.php" method="POST">
+            <label for="name">الاسم الكامل</label>
+              <input type="text" id="name" name="name" required>
+          
+
+
+              <input type="hidden" name="user_id" value="<?php echo $_SESSION['user_id']; ?>">
+
+
+
+
+
+              <label for="phone">رقم الهاتف</label>
+              <input type="tel" id="phone" name="phone" required>
+          
+              <label for="email">البريد الإلكتروني</label>
+              <input type="email" id="email" name="email" required>
+          
+              <label for="address">عنوان المنزل</label>
+              <input type="text" id="address" name="address" required>
+          
+              <label for="houseNumber">رقم المنزل</label>
+              <input type="tel" id="houseNumber" name="houseNumber" required>
+          
+              <label for="blockNumber">رقم القطعة</label>
+              <input type="tel" id="blockNumber" name="blockNumber" required>
+          
+              <button type="submit">إرسال العنوان</button>
+            </form>
+          </div>
+          
+    </div>
+
+    
+
+    <footer id="foter">
+        <footer >
+
+
+            <a href="cart.html" style="text-decoration: none; color: inherit;">
+                <div>🏠<br>الرئيسية<span></span></div>
+              </a>
+
+
+              <a href="cart.html" style="text-decoration: none; color: inherit;">
+                <div>👤<br>حسابي<span></span></div>
+              </a>
+
+           
+            <a href="cart.html" style="text-decoration: none; color: inherit;">
+                <div>🛒<br>السلة<span id="cartCount"></span></div>
+              </a>
+              
+
+            <a href="cart.html" style="text-decoration: none; color: inherit;">
+                <div>☰<br>القائمة<span></span></div>
+              </a>
+          </footer>
+          
+    </footer>
+
+    <script>
+      document.getElementById("deliveryForm").addEventListener("submit", function(event) {
+          event.preventDefault(); // إيقاف الإرسال الافتراضي للنموذج
+          
+          // بعد إرسال النموذج بنجاح، تحويل المستخدم إلى صفحة جديدة
+          window.location.href = "kpay.html"; // استبدل "newpage.html" بعنوان الصفحة الجديدة التي تريد تحويل المستخدم إليها
+      });
+  </script>
+  
+        
+        
+    
+</body>
+</html>

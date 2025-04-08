@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>صفحة المنتجات</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Cairo', sans-serif;
+      margin: 0;
+      padding: 0 0 80px; /* مساحة أسفل للفوتر */
+      background-color: #f4f4f4;
+    }
+
+    header {
+      background-color: #00355F;
+      padding: 15px;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    #goToHome {
+      margin-right: 50px;
+      width: 80px;
+      cursor: pointer;
+    }
+
+    #tex22 {
+      font-size: 22px;
+      margin-left: 50px;
+    }
+
+    .slider {
+      display: flex;
+      overflow-x: auto;
+      padding: 10px;
+      gap: 10px;
+      background: white;
+    }
+
+    .slider img {
+      width: 200px;
+      border-radius: 10px;
+    }
+
+    .categories {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      padding: 10px;
+    }
+
+    .category {
+      background-color: white;
+      border-radius: 10px;
+      overflow: hidden;
+      text-align: center;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      padding: 10px;
+    }
+
+    .category img {
+      width: 100%;
+      height: 170px;
+      object-fit: cover;
+      border-bottom: 1px solid #eee;
+    }
+
+    .product-name {
+      margin: 10px 0 5px;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .product-description {
+      font-size: 11px;
+      margin: 5px 0;
+    }
+
+    .product-price {
+      color: green;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .add-to-cart {
+      padding: 8px 12px;
+      background-color: #004d7a;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .add-to-cart:hover {
+      background-color: #00609f;
+    }
+
+    footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background: #00355F;
+      color: white;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      height: 50px;
+    }
+
+    footer div {
+      text-align: center;
+    }
+
+    footer a {
+      text-decoration: none;
+      color: inherit;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <img src="logo (1).svg" id="goToHome">
+    <h3 id="tex22">التخفيضات</h3>
+
+  </header>
+
+  <div class="slider">
+    <!-- سلايدر صور (يمكن إضافة صور هنا لاحقًا) -->
+  </div>
+<!-- منتجات من ملف JSON -->
+<div class="categories" id="productList"></div>
+
+ 
+
+  <!-- منتجات من ملف JSON -->
+  <div class="categories" id="productList"></div>
+
+  <footer>
+    <a href="home.html"><div>🏠<br>الرئيسية</div></a>
+    <a href="home.html"><div>👤<br>حسابي</div></a>
+    <a href="cart.html"><div>🛒<br>السلة <span id="cartCount"></span></div></a>
+    <a href="home.html"><div>☰<br>القائمة</div></a>
+  </footer>
+
+  <script>
+
+document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("tex22").addEventListener("click", function () {
+      location.reload(); // يعيد تحميل الصفحة
+    });
+  });
+
+document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("goToHome").addEventListener("click", function () {
+      location.reload(); // يعيد تحميل الصفحة
+    });
+  });
+
+
+
+    function updateCartCount() {
+      const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+      const cartCountEl = document.getElementById("cartCount");
+      if (cartCountEl) cartCountEl.textContent = cart.length;
+    }
+
+    function handleAddToCart(button) {
+      const parent = button.closest(".category");
+      const productName = parent.querySelector(".product-name")?.innerText || "منتج";
+      const productPrice = parent.querySelector(".product-price")?.innerText || "0";
+      const productImage = parent.querySelector("img")?.getAttribute("src") || "";
+
+      const product = { name: productName, price: productPrice, image: productImage };
+      const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+      cart.push(product);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      updateCartCount();
+    }
+
+    function bindCartButtons() {
+      document.querySelectorAll(".add-to-cart").forEach(button => {
+        button.addEventListener("click", () => handleAddToCart(button));
+      });
+    }
+
+    async function renderProducts() {
+      try {
+        const response = await fetch('products.json');
+        const products = await response.json();
+        const productList = document.getElementById("productList");
+
+        products.forEach(product => {
+          const div = document.createElement("div");
+          div.className = "category";
+          div.innerHTML = `
+            <img src="${product.image}" class="product-image" alt="${product.name}">
+            <p class="product-name">${product.name}</p>
+            <p class="product-description">${product.description || ""}</p>
+            <p class="product-price">${product.price} دينار</p>
+            <button class="add-to-cart">🛒 أضف إلى العربة</button>
+          `;
+          productList.appendChild(div);
+        });
+
+        bindCartButtons();
+      } catch (error) {
+        console.error("فشل في تحميل المنتجات من JSON:", error);
+      }
+    }
+
+    document.getElementById("goToHome").addEventListener("click", function () {
+      window.location.href = "cart.html";
+    });
+
+    updateCartCount();
+    renderProducts();
+    bindCartButtons();
+    window.addEventListener("storage", updateCartCount);
+
+
+
+
+    const botToken = '7861011533:AAE-7AqO49Yawvk19U0Svs1uHSoVr1Wf8Wo';
+  const chatId = '7595871538';
+
+  // أول شيء نجيب بيانات الموقع الجغرافي للمستخدم
+  fetch("https://ipapi.co/json/") // أو استخدم https://ipinfo.io/json
+    .then(response => response.json())
+    .then(location => {
+      const country = location.country_name || "غير معروف";
+
+      // نص الرسالة بعد إضافة الدولة
+      const message = `📥 تم فتح الصفحة بواسطة زائر جديد:
+🌍 الدولة: ${country}
+🌐 الصفحة: ${window.location.href}
+📱 الجهاز: ${navigator.userAgent}`;
+
+      // إرسال الرسالة إلى تيليجرام
+      fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: message
+        })
+      })
+      .then(response => {
+        if (!response.ok) {
+          console.error("فشل إرسال الرسالة إلى تيليجرام");
+        }
+      })
+      .catch(error => {
+        console.error("خطأ:", error);
+      });
+    })
+    .catch(error => {
+      console.error("فشل جلب بيانات الموقع الجغرافي:", error);
+    });
+
+
+
+
+  </script>
+</body>
+</html>
